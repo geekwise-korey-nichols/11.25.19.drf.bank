@@ -18,3 +18,29 @@ class Customer(models.Model):
     customer_name = models.CharField(max_length=30)
     customer_email = models.EmailField(max_length=300)
     
+    def __str__(self):
+        return f"{self.customer_name} - {self.branch}"
+    
+class Account(models.Model):
+    customer = models.ForeignKey(
+        Customer,
+        on_delete=models.CASCADE
+    )
+    account_amount = models.FloatField(max_length=10)
+
+class Product(models.Model):
+    option_types = (
+        ('checking', 'CHECKING'),
+        ('savings', 'SAVINGS'),
+        ('debit', 'DEBIT'),
+        ('credit', 'CREDIT')
+    )
+    account = models.ForeignKey(
+        Account,
+        on_delete=models.CASCADE
+    )
+    product_type = models.CharField(
+        max_length=8,
+        choices=option_types,
+        default=option_types[0]
+    )
